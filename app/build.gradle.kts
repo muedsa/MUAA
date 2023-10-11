@@ -118,8 +118,6 @@ dependencies {
 
     implementation(libs.datastore.pref)
 
-    implementation(libs.ktx.serialization.json)
-
     implementation(libs.timber)
 }
 
