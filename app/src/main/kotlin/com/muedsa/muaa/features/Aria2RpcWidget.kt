@@ -125,5 +125,39 @@ fun Aria2RpcWidget(
             }
             Spacer(modifier = Modifier.height(10.dp))
         }
+
+        item {
+            Row {
+                Button(onClick = {
+                    mainViewModel.aria2PauseAll()
+                }) {
+                    Text(text = "aria2.pauseAll")
+                }
+                Spacer(modifier = Modifier.width(10.dp))
+                Button(onClick = {
+                    mainViewModel.aria2UnpauseAll()
+                }) {
+                    Text(text = "aria2.unpauseAll")
+                }
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+        }
+
+        item {
+            Row {
+                Button(onClick = {
+                    mainViewModel.aria2PurgeDownloadResult()
+                }) {
+                    Text(text = "aria2.purgeDownloadResult")
+                }
+                Spacer(modifier = Modifier.width(10.dp))
+                Button(onClick = {
+                    mainViewModel.aria2SaveSession()
+                }) {
+                    Text(text = "aria2.saveSession")
+                }
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+        }
     }
 }

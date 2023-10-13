@@ -8,10 +8,13 @@ import com.muedsa.httpclient.SimpleHttpClient
 import com.muedsa.muaa.KEY_LINK_FILE_URL
 import com.muedsa.muaa.KEY_RPC_TOKEN
 import com.muedsa.muaa.KEY_RPC_URL
+import com.muedsa.muaa.model.Aria2Task
+import com.muedsa.muaa.model.JsonRpcResponse
 import com.muedsa.muaa.repo.DataStoreRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -26,8 +29,10 @@ class MainViewModel @Inject internal constructor(
     val rpcTokenState = mutableStateOf("not init")
     val linkFileUrlState = mutableStateOf("not init")
     val rpcResultState = mutableStateOf("")
+    val aria2TaskListState = mutableListOf<Aria2Task>()
 
     fun aria2TellActive() {
+        aria2TaskListState.clear()
         rpcResultState.value = "wait response..."
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -38,13 +43,32 @@ class MainViewModel @Inject internal constructor(
                         "method": "aria2.tellActive",
                         "params": [
                             "token:${rpcTokenState.value}",
-                            ["guid", "status", "completedLength", "totalLength", "files"]
+                            [
+                                "gid", 
+                                "status", 
+                                "dir", 
+                                "connections", 
+                                "downloadSpeed", 
+                                "completedLength", 
+                                "totalLength", 
+                                "files"
+                            ]
                         ]
                     }
                 """.trimIndent()
                 Timber.d("rpc request:\n$request")
-                rpcResultState.value =
-                    httpClient.post(rpcUrlState.value, request.encodeToByteArray())
+                val rpcResult = httpClient.post(rpcUrlState.value, request.encodeToByteArray())
+                Timber.d("rpc response:\n$rpcResult")
+                val response = JSON.decodeFromString<JsonRpcResponse<List<Aria2Task>>>(rpcResult)
+                if (response.result.isNullOrEmpty()) {
+                    rpcResultState.value = rpcResult
+                } else {
+                    response.result.forEach {
+                        Timber.d("$it")
+                    }
+                    rpcResultState.value = ""
+                    aria2TaskListState.addAll(response.result)
+                }
             } catch (t: Throwable) {
                 rpcResultState.value = t.stackTraceToString()
                 Timber.d(t)
@@ -93,6 +117,103 @@ class MainViewModel @Inject internal constructor(
         return httpClient.post(rpcUrlState.value, request.encodeToByteArray())
     }
 
+    fun aria2PauseAll() {
+        rpcResultState.value = "wait response..."
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val request = """
+                    {
+                        "id": 233,
+                        "jsonrpc": "2.0",
+                        "method": "aria2.pauseAll",
+                        "params": [
+                            "token:${rpcTokenState.value}"
+                        ]
+                    }
+                """.trimIndent()
+                Timber.d("rpc request:\n$request")
+                rpcResultState.value =
+                    httpClient.post(rpcUrlState.value, request.encodeToByteArray())
+            } catch (t: Throwable) {
+                rpcResultState.value = t.stackTraceToString()
+                Timber.d(t)
+            }
+        }
+    }
+
+    fun aria2UnpauseAll() {
+        rpcResultState.value = "wait response..."
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val request = """
+                    {
+                        "id": 233,
+                        "jsonrpc": "2.0",
+                        "method": "aria2.unpauseAll",
+                        "params": [
+                            "token:${rpcTokenState.value}"
+                        ]
+                    }
+                """.trimIndent()
+                Timber.d("rpc request:\n$request")
+                rpcResultState.value =
+                    httpClient.post(rpcUrlState.value, request.encodeToByteArray())
+            } catch (t: Throwable) {
+                rpcResultState.value = t.stackTraceToString()
+                Timber.d(t)
+            }
+        }
+    }
+
+    fun aria2PurgeDownloadResult() {
+        rpcResultState.value = "wait response..."
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val request = """
+                    {
+                        "id": 233,
+                        "jsonrpc": "2.0",
+                        "method": "aria2.purgeDownloadResult",
+                        "params": [
+                            "token:${rpcTokenState.value}"
+                        ]
+                    }
+                """.trimIndent()
+                Timber.d("rpc request:\n$request")
+                rpcResultState.value =
+                    httpClient.post(rpcUrlState.value, request.encodeToByteArray())
+            } catch (t: Throwable) {
+                rpcResultState.value = t.stackTraceToString()
+                Timber.d(t)
+            }
+        }
+    }
+
+    fun aria2SaveSession() {
+        rpcResultState.value = "wait response..."
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val request = """
+                    {
+                        "id": 233,
+                        "jsonrpc": "2.0",
+                        "method": "aria2.saveSession",
+                        "params": [
+                            "token:${rpcTokenState.value}"
+                        ]
+                    }
+                """.trimIndent()
+                Timber.d("rpc request:\n$request")
+                rpcResultState.value =
+                    httpClient.post(rpcUrlState.value, request.encodeToByteArray())
+            } catch (t: Throwable) {
+                rpcResultState.value = t.stackTraceToString()
+                Timber.d(t)
+            }
+        }
+    }
+
+
     fun saveSetting() {
         viewModelScope.launch(Dispatchers.IO) {
             dataStoreRepo.putString(KEY_RPC_URL, rpcUrlState.value)
@@ -112,5 +233,9 @@ class MainViewModel @Inject internal constructor(
                     ?: "https://raw.githubusercontent.com/muedsa/MUAA/download/example.txt"
             }
         }
+    }
+
+    companion object {
+        val JSON = Json { ignoreUnknownKeys = true }
     }
 }

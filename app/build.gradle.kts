@@ -4,6 +4,7 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.kotlinSerialization)
     kotlin("kapt")
     alias(libs.plugins.hiltAndroid)
 }
@@ -115,6 +116,9 @@ dependencies {
 
     implementation(libs.tv.foundation)
     implementation(libs.tv.material)
+
+    implementation(libs.ktx.serialization.json)
+
 
     implementation(libs.datastore.pref)
 

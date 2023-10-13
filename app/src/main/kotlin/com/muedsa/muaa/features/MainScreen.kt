@@ -26,6 +26,7 @@ fun MainScreen(
 ) {
 
     val rpcResult by remember { mainViewModel.rpcResultState }
+    val aria2TaskList = remember { mainViewModel.aria2TaskListState }
 
     Row(
         modifier = Modifier
@@ -45,14 +46,23 @@ fun MainScreen(
                 .width(1.dp)
         )
 
-        Text(
-            modifier = Modifier
-                .weight(1f)
-                .padding(20.dp)
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surfaceVariant),
-            text = rpcResult,
-            color = MaterialTheme.colorScheme.onSurface
-        )
+        if (rpcResult.isEmpty() && aria2TaskList.isNotEmpty()) {
+            Aria2TaskListWidget(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(20.dp),
+                taskList = aria2TaskList
+            )
+        } else {
+            Text(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(20.dp)
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                text = rpcResult,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
     }
 }
