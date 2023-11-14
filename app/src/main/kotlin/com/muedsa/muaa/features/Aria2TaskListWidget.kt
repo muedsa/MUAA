@@ -66,7 +66,8 @@ fun Aria2TaskCard(
                 modifier = Modifier.fillMaxWidth(),
                 text = "Progress: ${"%.2f".format(task.progress * 100)}%, Speed: ${task.downloadSpeed}, Connections:${task.connections}",
                 style = MaterialTheme.typography.bodyMedium,
-                maxLines = 1
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }

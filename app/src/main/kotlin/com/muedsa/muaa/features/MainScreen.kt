@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -25,8 +25,8 @@ fun MainScreen(
     mainViewModel: MainViewModel = viewModel()
 ) {
 
-    val rpcResult by remember { mainViewModel.rpcResultState }
-    val aria2TaskList = remember { mainViewModel.aria2TaskListState }
+    val rpcResult by mainViewModel.rpcResultSF.collectAsState()
+    val aria2TaskList by mainViewModel.aria2TaskListSF.collectAsState()
 
     Row(
         modifier = Modifier

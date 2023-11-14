@@ -25,7 +25,7 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "0.0.1-alpha01"
-
+        setProperty("archivesBaseName", "MUAA-$versionName")
     }
 
     signingConfigs {
@@ -98,6 +98,7 @@ dependencies {
     kapt(libs.hilt.compiler)
 
     implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.lifecycle.runtime.compose)
     implementation(libs.lifecycle.viewmodel.compose)
 
     implementation(libs.activity.compose)
