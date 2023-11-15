@@ -4,10 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
+import androidx.tv.material3.NonInteractiveSurfaceDefaults
+import androidx.tv.material3.Surface
 import com.muedsa.muaa.features.MainScreen
 import com.muedsa.muaa.ui.TvTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,7 +24,11 @@ class MainActivity : ComponentActivity() {
             TvTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    shape = RectangleShape,
+                    colors = NonInteractiveSurfaceDefaults.colors(
+                        containerColor = MaterialTheme.colorScheme.background,
+                        contentColor = MaterialTheme.colorScheme.onBackground
+                    )
                 ) {
                     MainScreen()
                 }

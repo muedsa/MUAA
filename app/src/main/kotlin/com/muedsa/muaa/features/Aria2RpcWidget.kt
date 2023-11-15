@@ -1,10 +1,8 @@
 package com.muedsa.muaa.features
 
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -14,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -39,7 +38,84 @@ fun Aria2RpcWidget(
         var rpcToken by remember { mutableStateOf(appSetting.rpcToken) }
         var linkFileUrl by remember { mutableStateOf(appSetting.linkFileUrl) }
 
-        TvLazyColumn(modifier = modifier) {
+        TvLazyColumn(
+            modifier = modifier,
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+        ) {
+            item {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        mainViewModel.aria2TellActive(
+                            rpcUrl = rpcUrl,
+                            rpcToken = rpcToken
+                        )
+                    }
+                ) {
+                    Text(text = "aria2.tellActive")
+                }
+            }
+
+            item {
+                Button(
+                    modifier = Modifier.fillMaxWidth(), onClick = {
+                        mainViewModel.aria2PauseAll(
+                            rpcUrl = rpcUrl,
+                            rpcToken = rpcToken
+                        )
+                    }) {
+                    Text(text = "aria2.pauseAll")
+                }
+            }
+
+            item {
+                Button(
+                    modifier = Modifier.fillMaxWidth(), onClick = {
+                        mainViewModel.aria2PurgeDownloadResult(
+                            rpcUrl = rpcUrl,
+                            rpcToken = rpcToken
+                        )
+                    }) {
+                    Text(text = "aria2.purgeDownloadResult")
+                }
+            }
+
+            item {
+                Button(
+                    modifier = Modifier.fillMaxWidth(), onClick = {
+                        mainViewModel.aria2SaveSession(
+                            rpcUrl = rpcUrl,
+                            rpcToken = rpcToken
+                        )
+                    }) {
+                    Text(text = "aria2.saveSession")
+                }
+            }
+
+            item {
+                Button(
+                    modifier = Modifier.fillMaxWidth(), onClick = {
+                        mainViewModel.aria2UnpauseAll(
+                            rpcUrl = rpcUrl,
+                            rpcToken = rpcToken
+                        )
+                    }) {
+                    Text(text = "aria2.unpauseAll")
+                }
+            }
+
+            item {
+                Button(
+                    modifier = Modifier.fillMaxWidth(), onClick = {
+                        mainViewModel.aria2AddUriFromFileUrl(
+                            rpcUrl = rpcUrl,
+                            rpcToken = rpcToken,
+                            fileUrl = linkFileUrl
+                        )
+                    }) {
+                    Text(text = "aria2.addUri From URL below")
+                }
+            }
             item {
                 OutlinedTextField(
                     modifier = Modifier.fillMaxWidth(),
@@ -59,20 +135,7 @@ fun Aria2RpcWidget(
                         Text(text = "MAGNET LINK FILE URL")
                     }
                 )
-                Spacer(modifier = Modifier.height(10.dp))
-            }
 
-            item {
-                Button(onClick = {
-                    mainViewModel.aria2AddUriFromFileUrl(
-                        rpcUrl = rpcUrl,
-                        rpcToken = rpcToken,
-                        fileUrl = linkFileUrl
-                    )
-                }) {
-                    Text(text = "aria2.addUri From URL")
-                }
-                Spacer(modifier = Modifier.height(10.dp))
             }
 
             item {
@@ -94,7 +157,6 @@ fun Aria2RpcWidget(
                         Text(text = "RPC URL")
                     }
                 )
-                Spacer(modifier = Modifier.height(10.dp))
             }
 
             item {
@@ -116,80 +178,28 @@ fun Aria2RpcWidget(
                         Text(text = "RPC TOKEN")
                     }
                 )
-                Spacer(modifier = Modifier.height(10.dp))
             }
 
             item {
-                Row {
-                    Button(onClick = {
-                        mainViewModel.saveSetting(
-                            AppSetting(
-                                rpcUrl = rpcUrl,
-                                rpcToken = rpcToken,
-                                linkFileUrl = linkFileUrl
-                            )
-                        )
-                    }) {
-                        Text(text = "Save Setting")
-                    }
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Button(onClick = {
-                        mainViewModel.aria2TellActive(
+                Button(onClick = {
+                    mainViewModel.saveSetting(
+                        AppSetting(
                             rpcUrl = rpcUrl,
-                            rpcToken = rpcToken
+                            rpcToken = rpcToken,
+                            linkFileUrl = linkFileUrl
                         )
-                    }) {
-                        Text(text = "aria2.tellActive")
-                    }
+                    )
+                }) {
+                    Text(text = "Save Setting")
                 }
-                Spacer(modifier = Modifier.height(10.dp))
             }
-
-            item {
-                Row {
-                    Button(onClick = {
-                        mainViewModel.aria2PauseAll(
-                            rpcUrl = rpcUrl,
-                            rpcToken = rpcToken
-                        )
-                    }) {
-                        Text(text = "aria2.pauseAll")
-                    }
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Button(onClick = {
-                        mainViewModel.aria2UnpauseAll(
-                            rpcUrl = rpcUrl,
-                            rpcToken = rpcToken
-                        )
-                    }) {
-                        Text(text = "aria2.unpauseAll")
-                    }
-                }
-                Spacer(modifier = Modifier.height(10.dp))
-            }
-
-            item {
-                Row {
-                    Button(onClick = {
-                        mainViewModel.aria2PurgeDownloadResult(
-                            rpcUrl = rpcUrl,
-                            rpcToken = rpcToken
-                        )
-                    }) {
-                        Text(text = "aria2.purgeDownloadResult")
-                    }
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Button(onClick = {
-                        mainViewModel.aria2SaveSession(
-                            rpcUrl = rpcUrl,
-                            rpcToken = rpcToken
-                        )
-                    }) {
-                        Text(text = "aria2.saveSession")
-                    }
-                }
-                Spacer(modifier = Modifier.height(10.dp))
-            }
+        }
+    } else {
+        Box(
+            modifier = modifier,
+            contentAlignment = Alignment.Center
+        ) {
+            Text(text = "Loading...(￣o￣) . z Z")
         }
     }
 }

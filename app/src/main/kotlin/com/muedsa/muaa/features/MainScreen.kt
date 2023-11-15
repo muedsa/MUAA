@@ -1,6 +1,7 @@
 package com.muedsa.muaa.features
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -54,15 +55,18 @@ fun MainScreen(
                 taskList = aria2TaskList
             )
         } else {
-            Text(
+            Box(
                 modifier = Modifier
                     .weight(1f)
                     .padding(20.dp)
                     .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.surfaceVariant),
-                text = rpcResult,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
+            ) {
+                Text(
+                    text = rpcResult,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
         }
     }
 }
