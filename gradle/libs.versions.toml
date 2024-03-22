@@ -13,7 +13,7 @@ ktx-serialization-json = "1.6.3"
 timber = "5.0.1"
 google-services = "4.4.1"
 firebase-crashlytics-gradle-plugin = "2.9.9"
-firebase-bom = "32.7.3"
+firebase-bom = "32.8.0"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
